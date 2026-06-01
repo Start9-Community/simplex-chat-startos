@@ -4,6 +4,9 @@ Welcome! This package runs SimpleX Chat as a headless bot, with a WebSocket
 interface so you can drive it from any client that speaks the SimpleX terminal
 chat protocol.
 
+## Warning: Anonymous Access Allowed
+The WebSocket has no built-in auth — anything that can reach the URLs that StartOS publishes can drive the bot. Use StartOS's LAN/Tor controls to restrict access.
+
 ## Configuration
 
 The bot's own profile is its configuration — there's no separate StartOS-side
@@ -120,5 +123,3 @@ and no profile picture — you can change those again in *Configure*.
 - **Invitation links** — *Create Invitation* action (one-time, generated
   on demand).
 - **Reset** — *Reset Profile* action.
-- **Logs** — the `.simplex/bot.log` file inside the `main` volume captures
-  everything `simplex-chat` writes to stdout/stderr.

@@ -46,7 +46,10 @@ const inputSpec = InputSpec.of({
     default: null,
     placeholder: 'data:image/jpg;base64,...',
     minLength: null,
-    maxLength: null,
+    // ≈256KB of binary after base64 expansion — generous for a profile
+    // picture, but prevents accidental "I pasted the wrong file" submissions
+    // from bloating the bot profile and StartOS backups.
+    maxLength: 350_000,
     patterns: [],
   }),
   // Hidden — round-tripped from getInput → run so we know which user to

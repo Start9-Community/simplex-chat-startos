@@ -3,7 +3,10 @@ import * as path from 'node:path'
 import { sdk } from '../sdk'
 import { i18n } from '../i18n'
 
-const VOLUME_PATH = '/media/startos/volumes/main'
+// Resolves to /media/startos/volumes/main (StartOS's on-host mount of our
+// "main" volume), but typed against the manifest so a rename or removal of
+// the volume would be a compile error rather than a runtime surprise.
+const VOLUME_PATH = sdk.volumes.main.path
 
 /**
  * Wipe all SimpleX Chat data from the "main" volume. Service must be stopped

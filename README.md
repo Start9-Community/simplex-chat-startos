@@ -7,7 +7,7 @@ SimpleX Chat is the first messenger with no user identifiers — not even random
 ## What this package does
 
 - Boots `simplex-chat` in bot mode (`-p 5226 --create-bot-display-name "SimpleX Bot" --create-bot-allow-files`) so the binary auto-creates a fresh profile on first start.
-- Bridges the bot's internal TCP control port to a WebSocket via [`websocat`](https://github.com/vi/websocat), so any WebSocket client can drive the bot using the [SimpleX bot protocol](https://github.com/simplex-chat/simplex-chat/blob/stable/bots/README.md). StartOS wraps this in its own NAT/PAT layer and surfaces the user-facing URL under *Interfaces* in the package UI.
+- Bridges the bot's internal TCP control port to a WebSocket via [`websocat`](https://github.com/vi/websocat), so any WebSocket client can drive the bot using the [SimpleX bot protocol](https://github.com/simplex-chat/simplex-chat/blob/stable/bots/README.md). StartOS wraps this in its own NAT layer and surfaces the user-facing URL under *Interfaces* in the package UI.
 - Persists the bot's profile and chat history to the package's `main` volume — there's no separate package-level config, since the bot's own profile is the source of truth.
 - Adds StartOS actions that talk directly to the running bot over the same WebSocket protocol (using the daemon container's bridge IP, no extra ports), to edit the live profile and to mint one-time invitation links.
 
@@ -26,18 +26,18 @@ External WebSocket client                StartOS actions
         │  URL surfaced by StartOS              │
         │  (Interfaces → WebSocket)             │  ws://<container-ip>:5225
         ▼                                       │  (uses effects.getContainerIp)
-   StartOS NAT/PAT                              │
+   StartOS NAT                                  │
         │                                       ▼
         └───────────────▶ websocat (container :5225) ──▶ ws://127.0.0.1:5226
                                                                 │
                                                         simplex-chat (-p 5226)
                                                                 │
                                                                 └─ /data (volume "main")
-                                                                   └─ .simplex/   (profile + bot.log)
+                                                                   └─ .simplex/   (profile)
 ```
 
 `5225` is the container-internal port `websocat` listens on. External clients
-reach it through StartOS's NAT/PAT layer using whichever LAN/Tor URL the OS
+reach it through StartOS's NAT layer using whichever LAN/Tor URL the OS
 publishes. StartOS actions take a shortcut: they ask the SDK for the daemon
 container's bridge-network IP and open a WebSocket directly to it, no second
 port or socket required.
@@ -55,7 +55,7 @@ Prerequisites: `start-cli` (see [Start9 SDK install docs](https://docs.start9.co
 
 ## Repository
 
-- Package: <https://github.com/lundog/simplex-chat-startos>
+- Package: <https://github.com/Start9-Community/simplex-chat-startos>
 - Upstream: <https://github.com/simplex-chat/simplex-chat>
 
 ## License

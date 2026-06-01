@@ -5,7 +5,7 @@ export const manifest = setupManifest({
   id: 'simplex-chat',
   title: 'SimpleX Chat',
   license: 'MIT',
-  packageRepo: 'https://github.com/lundog/simplex-chat-startos',
+  packageRepo: 'https://github.com/Start9-Community/simplex-chat-startos',
   upstreamRepo: 'https://github.com/simplex-chat/simplex-chat',
   marketingUrl: 'https://simplex.chat/',
   donationUrl: 'https://github.com/simplex-chat/simplex-chat#help-us-with-donations',

@@ -48,6 +48,7 @@ mkdir -p /simplex/inbound /simplex/tmp /simplex/outbound
   --create-bot-allow-files \
   --files-folder /simplex/inbound \
   --temp-folder /simplex/tmp \
+  --yes-migrate \
   &
 SIMPLEX_PID=$!
 

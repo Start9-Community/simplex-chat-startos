@@ -34,7 +34,19 @@ const v011 = VersionInfo.of<'0.1.1:0'>({
   migrations: {},
 })
 
+const v020 = VersionInfo.of<'0.2.0:0'>({
+  version: '0.2.0:0',
+  releaseNotes: [
+    'Shared volume file exchange release',
+    '',
+    'Features:',
+    '- Shared volume file exchange — enables file sending and receiving via /simplex/outbound and /simplex/inbound folders.',
+    '- Updates upstream simplex-chat to v6.5.4.',
+  ].join('\n'),
+  migrations: {},
+})
+
 export const versionGraph = VersionGraph.of({
-  current: v011,
-  other: [v010],
+  current: v020,
+  other: [v010, v011],
 })

@@ -34,10 +34,20 @@ cleanup() {
 }
 trap cleanup TERM INT EXIT
 
+# File exchange contract paths (docs/file-exchange-architecture.md §3):
+# received files and in-progress transfers land under /simplex/* so that
+# consumer packages mounting the same volume subpaths at the same
+# mountpoints can use these paths verbatim. /simplex is a single mount;
+# inbound and tmp must be plain subdirectories of it so simplex-chat's
+# tmp→inbound rename stays on one filesystem.
+mkdir -p /simplex/inbound /simplex/tmp /simplex/outbound
+
 /usr/local/bin/simplex-chat \
   -p 5226 \
   --create-bot-display-name "SimpleX Bot" \
   --create-bot-allow-files \
+  --files-folder /simplex/inbound \
+  --temp-folder /simplex/tmp \
   &
 SIMPLEX_PID=$!
 

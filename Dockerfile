@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y \
 
 # simplex-chat: pinned binary + SHA-256 per architecture.
 # When bumping SIMPLEX_VERSION, refresh hashes from the upstream release page:
-# https://github.com/simplex-chat/simplex-chat/releases/tag/v6.5.2
-ARG SIMPLEX_VERSION=v6.5.2
-ARG SIMPLEX_SHA256_X86_64=02e4b2037f626250a30cf1a6ffb44ae65314957fdbc487a2833d68ced48f500d
-ARG SIMPLEX_SHA256_AARCH64=c62db0142560600fd2d72b9f767de6baf565cd1890d66dcb366babd78bc0e720
+# https://github.com/simplex-chat/simplex-chat/releases/tag/v6.5.4
+ARG SIMPLEX_VERSION=v6.5.4
+ARG SIMPLEX_SHA256_X86_64=8c33b69e3cd5691e7a7aec455fc82955347d631572f0ff2c68eb3e12f50ab655
+ARG SIMPLEX_SHA256_AARCH64=ea864a205d38cec7ca25ecea9f5e50469055b3a39d70611e3c71a84cb012e0f3
 ARG TARGETARCH
 RUN case "$TARGETARCH" in \
     amd64) SIMPLEX_ARCH="x86_64";  SIMPLEX_SHA256="${SIMPLEX_SHA256_X86_64}"  ;; \

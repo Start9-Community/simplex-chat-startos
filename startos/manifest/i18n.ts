@@ -6,4 +6,4 @@ export const long =
 export const installAlert =
   'SimpleX Gateway exposes the SimpleX network over a WebSocket API for your own software to drive — there is no human chat interface here (use the SimpleX mobile or desktop apps for that).\n\n' +
   'To use it: point a WebSocket client at the URL under Interfaces → WebSocket — a bot, an integration like OpenClaw, or your own scripts — and run the "Create Invitation" action to hand a contact a connection link.\n\n' +
-  "The WebSocket has no built-in authentication: anything that can reach the URL StartOS publishes can drive the gateway. Use StartOS's LAN/Tor controls to restrict access."
+  'Outside access requires an API key: open the "API Keys" action to grab the one created on install (or add your own), and send it as Authorization: Bearer <token>. On-box services connect directly and need no key.'

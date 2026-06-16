@@ -44,6 +44,17 @@ const dict = {
   'Reset Failed': 32,
   'Profile Reset': 33,
   'The bot identity and all chat data have been deleted. Start the service to generate a fresh profile.': 34,
+
+  // api-keys action
+  'API Keys': 37,
+  'Manage the bearer tokens that gate outside access to the WebSocket API.': 38,
+  'Bearer tokens that grant outside access to the WebSocket API. Add one per client; delete to revoke. On-box services connect directly and never need a key.': 39,
+  Label: 40,
+  'A name to identify this key (e.g. the client it belongs to).': 41,
+  Token: 42,
+  'Leave blank when adding a key and one is generated for you. Keep it secret.': 43,
+  'API Keys Saved': 44,
+  'Outside clients authenticate with the header: Authorization: Bearer <token>': 45,
 } as const
 
 /**

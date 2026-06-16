@@ -5,8 +5,18 @@ you can drive it from any client that speaks the SimpleX terminal chat protocol 
 a bot, an integration, or your own scripts. There's no human chat UI here; for
 human messaging, use the SimpleX mobile or desktop apps.
 
-## Warning: Anonymous Access Allowed
-The WebSocket has no built-in auth — anything that can reach the URLs that StartOS publishes can drive the gateway. Use StartOS's LAN/Tor controls to restrict access.
+## Authentication
+
+Outside access to the WebSocket API is gated by a **bearer token** at the StartOS
+reverse proxy: connect with `Authorization: Bearer <token>` on the WebSocket
+upgrade — requests without a valid token get `401` and never reach the gateway.
+
+Manage tokens in the **API Keys** action — each key has a label (to identify the
+client) and a generated token. Add a key per client; delete one to revoke its
+access. One key is created automatically on install.
+
+On-box StartOS services (dependents) connect to the gateway directly and do
+**not** need a key.
 
 ## Configuration
 

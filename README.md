@@ -42,6 +42,32 @@ publishes. StartOS actions take a shortcut: they ask the SDK for the daemon
 container's bridge-network IP and open a WebSocket directly to it, no second
 port or socket required.
 
+## File exchange contract
+
+Other StartOS packages can exchange files with the bot by mounting subpaths of
+this package's `main` volume via StartOS dependency mounts (`mountDependency`).
+The package publishes a well-known layout: the volume's `simplex` subpath is
+mounted at `/simplex` in the bot's container (a single mount — simplex-chat
+renames completed downloads from `tmp` to `inbound`, which requires both to be
+on one filesystem), containing:
+
+| Volume subpath | Container path | Access for consumers | Purpose |
+|---|---|---|---|
+| `simplex/inbound` | `/simplex/inbound` | read-only | Files received by the bot (`--files-folder`) |
+| `simplex/tmp` | `/simplex/tmp` | read-only (optional) | In-progress transfers (`--temp-folder`) |
+| `simplex/outbound` | `/simplex/outbound` | read-write | Consumer-written files for the bot to send |
+
+A consumer that mounts these subpaths at the *same mountpoints* can use file
+paths from WebSocket messages verbatim, and pass `/simplex/outbound/...` paths
+in send commands verbatim — no path translation. Do **not** mount the whole
+`main` volume; it contains the bot's profile database and keys.
+
+For dependents that declare a `kind: 'running'` requirement, the package
+exposes a `websocket` health check ID.
+
+[OpenClaw](https://github.com/Start9-Community/openclaw-startos) is an example
+consumer. See `docs/file-exchange-architecture.md` for the full design.
+
 ## Building
 
 ```sh

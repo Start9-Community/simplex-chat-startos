@@ -12,11 +12,12 @@ export const manifest = setupManifest({
   description: { short, long },
   volumes: ['main'],
   images: {
+    // Consume the standalone container image published from
+    // github.com/lundog/simplex-chat-docker, rather than building locally.
+    // Bump this tag deliberately when the upstream SimpleX version changes.
     simplex: {
       source: {
-        dockerBuild: {
-          workdir: '.'
-        }
+        dockerTag: 'lundog/simplex-chat:6.5.4'
       },
       arch: ['x86_64', 'aarch64']
     }

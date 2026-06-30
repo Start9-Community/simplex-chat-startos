@@ -1,6 +1,6 @@
 # Updating the upstream version
 
-SimpleX Gateway runs the [SimpleX Chat](https://github.com/simplex-chat/simplex-chat)
+SimpleX Websocket Bridge runs the [SimpleX Chat](https://github.com/simplex-chat/simplex-chat)
 client headless. The runtime is the standalone container image built from
 [lundog/simplex-chat-docker](https://github.com/lundog/simplex-chat-docker) and
 published to Docker Hub as `lundog/simplex-chat`. "Upstream" here means the

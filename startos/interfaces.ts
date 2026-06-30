@@ -17,13 +17,13 @@ export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
     // container. Same-box dependents (and our own actions) bypass by dialing
     // the container's bridge IP directly — that path doesn't traverse the proxy.
     addSsl: {
-      auth: { type: 'bearer', tokens, realm: 'SimpleX Gateway' },
+      auth: { type: 'bearer', tokens, realm: 'SimpleX Websocket Bridge' },
     },
   })
   const wsInterface = sdk.createInterface(effects, {
-    name: i18n('WebSocket'),
+    name: i18n('Websocket'),
     id: 'ws',
-    description: i18n('WebSocket for SimpleX Gateway'),
+    description: i18n('Websocket API for driving SimpleX programmatically'),
     type: 'api',
     masked: false,
     schemeOverride: { ssl: 'wss', noSsl: 'ws' },

@@ -30,17 +30,15 @@ export const resetProfile = sdk.Action.withoutInput(
     visibility: 'enabled',
   }),
   async () => {
-    let removed = 0
     try {
       const entries = await fs.readdir(VOLUME_PATH)
       for (const entry of entries) {
-        // Keep store.json — API keys are gateway access config, not bot identity.
+        // Keep store.json — API keys are bridge access config, not bot identity.
         if (entry === 'store.json') continue
         await fs.rm(path.join(VOLUME_PATH, entry), {
           recursive: true,
           force: true,
         })
-        removed++
       }
     } catch (err) {
       return {
@@ -57,13 +55,7 @@ export const resetProfile = sdk.Action.withoutInput(
       message: i18n(
         'The bot identity and all chat data have been deleted. Start the service to generate a fresh profile.',
       ),
-      result: {
-        type: 'single',
-        value: `${removed} item(s) removed`,
-        copyable: false,
-        qr: false,
-        masked: false,
-      },
+      result: null,
     }
   },
 )

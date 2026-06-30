@@ -6,7 +6,7 @@ import { i18n } from '../i18n'
 const { InputSpec, Value, List } = sdk
 
 /**
- * Manage the bearer tokens that gate outside access to the WebSocket API.
+ * Manage the bearer tokens that gate outside access to the Websocket API.
  *
  * The tokens are enforced by the StartOS reverse proxy (see interfaces.ts).
  * Adding/removing a key here rewrites store.json, which re-runs
@@ -18,7 +18,7 @@ const inputSpec = InputSpec.of({
       {
         name: i18n('API Keys'),
         description: i18n(
-          'Bearer tokens that grant outside access to the WebSocket API. Add one per client; delete to revoke. On-box services connect directly and never need a key.',
+          'Bearer tokens that grant outside access to the Websocket API. Add one per client; delete to revoke. On-box services connect directly and never need a key.',
         ),
       },
       {
@@ -55,7 +55,7 @@ export const apiKeys = sdk.Action.withInput(
   async () => ({
     name: i18n('API Keys'),
     description: i18n(
-      'Manage the bearer tokens that gate outside access to the WebSocket API.',
+      'Manage the bearer tokens that gate outside access to the Websocket API.',
     ),
     warning: null,
     allowedStatuses: 'any',

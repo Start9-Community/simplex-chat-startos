@@ -1,14 +1,16 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { installAlert, long, short } from './i18n'
+import { long, short } from './i18n'
 
 export const manifest = setupManifest({
-  id: 'simplex-gateway',
-  title: 'SimpleX Gateway',
+  id: 'simplex-websocket-bridge',
+  title: 'SimpleX Websocket Bridge',
   license: 'MIT',
-  packageRepo: 'https://github.com/Start9-Community/simplex-gateway-startos',
+  packageRepo:
+    'https://github.com/Start9-Community/simplex-websocket-bridge-startos',
   upstreamRepo: 'https://github.com/simplex-chat/simplex-chat',
   marketingUrl: 'https://simplex.chat/',
-  donationUrl: 'https://github.com/simplex-chat/simplex-chat#help-us-with-donations',
+  donationUrl:
+    'https://github.com/simplex-chat/simplex-chat#help-us-with-donations',
   description: { short, long },
   volumes: ['main'],
   images: {
@@ -22,8 +24,5 @@ export const manifest = setupManifest({
       arch: ['x86_64', 'aarch64'],
     },
   },
-  alerts: {
-    install: installAlert
-  },
-  dependencies: {}
+  dependencies: {},
 })

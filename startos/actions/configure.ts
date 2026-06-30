@@ -7,7 +7,7 @@ import { i18n } from '../i18n'
 const { InputSpec, Value } = sdk
 
 /**
- * Live editor for the gateway's SimpleX profile: display name, picture, and
+ * Live editor for the bridge's SimpleX profile: display name, picture, and
  * file/media sharing.
  *
  * Open: calls /user and prefills the form from the active user's current
@@ -56,7 +56,7 @@ const inputSpec = InputSpec.of({
   allowFiles: Value.toggle({
     name: i18n('Allow files & media'),
     description: i18n(
-      'When on, contacts can send files and media to the gateway, and the gateway can send them. When off, file and media transfers are disabled.',
+      'When on, contacts can send files and media to the bridge, and the bridge can send them. When off, file and media transfers are disabled.',
     ),
     default: true,
   }),
@@ -101,7 +101,7 @@ export const configure = sdk.Action.withInput(
       displayName: profile.displayName ?? '',
       image: profile.image ?? '',
       // Anything other than an explicit "no" is treated as enabled (the
-      // gateway's default), so an unset preference reads as on.
+      // bridge's default), so an unset preference reads as on.
       allowFiles: profile.preferences?.files?.allow !== SX.FeatureAllowed.No,
       _userId: userId,
       _fullName: profile.fullName ?? '',

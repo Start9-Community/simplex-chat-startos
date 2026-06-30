@@ -1,5 +1,5 @@
 {
-  "name": "simplex-chat-startos",
+  "name": "simplex-websocket-bridge-startos",
   "scripts": {
     "build": "rm -rf ./javascript && ncc build startos/index.ts -o ./javascript",
     "prettier": "prettier --write startos",
@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@simplex-chat/types": "^0.7.0",
-    "@start9labs/start-sdk": "^1.5.3",
+    "@start9labs/start-sdk": "1.5.3",
     "ws": "^8.18.0"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ export const port = 5225
 /**
  * The `main` volume is mounted wholly at /data (HOME, profile database).
  *
- * The file exchange contract (docs/file-exchange-architecture.md §3) re-mounts
+ * The file exchange contract (see README) re-mounts
  * the volume's `.simplex/media` subpath at a neutral /simplex prefix so that
  * consumer packages can mount its subdirectories at identical mountpoints
  * and use file paths from WS messages verbatim:

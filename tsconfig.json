@@ -1,11 +1,11 @@
 {
+  "include": ["startos/**/*.ts", "node_modules/**/startos"],
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "target": "ES2018",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true
   }
 }

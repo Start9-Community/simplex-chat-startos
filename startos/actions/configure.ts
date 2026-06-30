@@ -7,15 +7,16 @@ import { i18n } from '../i18n'
 const { InputSpec, Value } = sdk
 
 /**
- * Live editor for the bot's profile (display name + picture).
+ * Live editor for the bridge's SimpleX profile: display name, picture, and
+ * file/media sharing.
  *
- * Open: calls /user, prefills the form with the active user's current
- * profile, and stashes the userId + fullName in hidden fields so they ride
- * along on submit.
+ * Open: calls /user and prefills the form from the active user's current
+ * profile — including the live file-sharing preference, so submitting without
+ * touching the toggle can't silently flip it.
  *
- * Submit: sends /_profile <userId> { displayName, fullName, image } to the
- * running bot. The fullName comes from the stashed value so we don't erase
- * whatever the upstream profile holds beyond what this form exposes.
+ * Submit: re-fetches the live profile and sends /_profile <userId> <profile>
+ * with the edited fields applied *on top of* it, so peerType (the bot marker)
+ * and any other preferences are preserved, not clobbered.
  *
  * Schema reference:
  *   https://github.com/simplex-chat/simplex-chat/blob/stable/bots/api/COMMANDS.md#showactiveuser
@@ -52,8 +53,15 @@ const inputSpec = InputSpec.of({
     maxLength: 350_000,
     patterns: [],
   }),
-  // Hidden — round-tripped from getInput → run so we know which user to
-  // update and what to keep beyond what the form lets the user edit.
+  allowFiles: Value.toggle({
+    name: i18n('Allow files & media'),
+    description: i18n(
+      'When on, contacts can send files and media to the bridge, and the bridge can send them. When off, file and media transfers are disabled.',
+    ),
+    default: true,
+  }),
+  // Hidden — round-tripped from getInput → run as fallbacks if the live
+  // re-fetch on submit fails.
   _userId: Value.hidden<number | null>(),
   _fullName: Value.hidden<string | null>(),
 })
@@ -75,8 +83,10 @@ async function fetchActiveUser(
 export const configure = sdk.Action.withInput(
   'configure',
   async () => ({
-    name: i18n('Configure'),
-    description: i18n('Edit the SimpleX bot profile.'),
+    name: i18n('Configure Bot Profile'),
+    description: i18n(
+      'Edit the bot profile — display name, picture, and file sharing.',
+    ),
     warning: null,
     allowedStatuses: 'only-running',
     group: i18n('General'),
@@ -84,39 +94,51 @@ export const configure = sdk.Action.withInput(
   }),
   inputSpec,
   async ({ effects }) => {
-    // Always fetch fresh — don't trust the prefill, since the bot's profile
-    // can change between opens.
+    // Always fetch fresh — don't trust a stale prefill, since the profile can
+    // change between opens.
     const { userId, profile } = await fetchActiveUser(effects)
     return {
       displayName: profile.displayName ?? '',
       image: profile.image ?? '',
+      // Anything other than an explicit "no" is treated as enabled (the
+      // bridge's default), so an unset preference reads as on.
+      allowFiles: profile.preferences?.files?.allow !== SX.FeatureAllowed.No,
       _userId: userId,
       _fullName: profile.fullName ?? '',
     }
   },
   async ({ effects, input }) => {
-    // Re-resolve the userId at submit time too: if the bot was reset or the
-    // active user swapped between open and submit, the hidden field is
-    // stale. We prefer the live value when they disagree.
+    // Re-resolve the live profile at submit time: if the bot was reset or the
+    // active user swapped between open and submit, the hidden fields are stale.
     const live = await fetchActiveUser(effects).catch(() => null)
     const userId = live?.userId ?? input._userId
     if (typeof userId !== 'number') {
       return {
         version: '1',
         title: i18n('Could Not Update Profile'),
-        message: i18n(
-          'No active user — the bot may not be fully started yet.',
-        ),
+        message: i18n('No active user — the bot may not be fully started yet.'),
         result: null,
       }
     }
 
-    const fullName = live?.profile.fullName ?? input._fullName ?? ''
-
+    // Apply edits on top of the current profile so peerType and any other
+    // preferences ride through untouched.
+    const base = live?.profile
     const newProfile: SX.Profile = {
       displayName: input.displayName,
-      fullName,
+      fullName: base?.fullName ?? input._fullName ?? '',
+      shortDescr: base?.shortDescr,
       image: input.image?.trim() || undefined,
+      contactLink: base?.contactLink,
+      preferences: {
+        ...base?.preferences,
+        files: {
+          allow: input.allowFiles
+            ? SX.FeatureAllowed.Yes
+            : SX.FeatureAllowed.No,
+        },
+      },
+      peerType: base?.peerType,
     }
 
     const cmd = `/_profile ${userId} ${JSON.stringify(newProfile)}`
@@ -136,7 +158,10 @@ export const configure = sdk.Action.withInput(
     const respType = env.resp?.type
     // The bot acknowledges /_profile with type: "userProfileUpdated" (or
     // "userProfileNoChange" if nothing changed). Anything else is unexpected.
-    if (respType !== 'userProfileUpdated' && respType !== 'userProfileNoChange') {
+    if (
+      respType !== 'userProfileUpdated' &&
+      respType !== 'userProfileNoChange'
+    ) {
       return {
         version: '1',
         title: i18n('Bot Refused Update'),
@@ -145,14 +170,7 @@ export const configure = sdk.Action.withInput(
       }
     }
 
-    return {
-      version: '1',
-      title: i18n('Profile Updated'),
-      message:
-        respType === 'userProfileNoChange'
-          ? i18n('No changes were needed — the profile already matched.')
-          : i18n('The bot profile has been updated.'),
-      result: null,
-    }
+    // Success — no modal; hitting save already implies the update.
+    return null
   },
 )

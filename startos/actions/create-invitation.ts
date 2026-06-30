@@ -1,3 +1,4 @@
+import { T } from '@start9labs/start-sdk'
 import { CR } from '@simplex-chat/types'
 import { sdk } from '../sdk'
 import { withBotSession } from '../bot-client'
@@ -74,7 +75,7 @@ export const createInvitation = sdk.Action.withoutInput(
       }
     }
 
-    const members: any[] = []
+    const members: T.ActionResultMember[] = []
     if (short) {
       members.push({
         type: 'single',
